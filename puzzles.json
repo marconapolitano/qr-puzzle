@@ -8,5 +8,10 @@
     "id": "fraschette",
     "message": "Le fraschette più famose dei Castelli non sono qui.\nSono dove il maiale regna e il vino si versa a litri.",
     "secret": "le fraschette"
+  },
+  {
+    "id": "romanella",
+    "message": "La Romanella vera non si beve qui.\nSi beve dove la piazza guarda il cielo e il porco è il re.",
+    "secret": "la romanella"
   }
 ]
