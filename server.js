@@ -47,6 +47,27 @@ app.post('/api/:id/redeem', (req, res) => {
   res.json({ success: true });
 });
 
+// reset endpoint — richiede header X-Reset-Token: porchettari2025
+app.post('/api/reset/:id?', (req, res) => {
+  if (req.headers['x-reset-token'] !== 'porchettari2025') {
+    return res.status(403).json({ error: 'forbidden' });
+  }
+  const target = req.params.id;
+  if (target) {
+    if (!puzzleMap[target]) return res.status(404).json({ error: 'not_found' });
+    const f = statePath(target);
+    if (fs.existsSync(f)) fs.unlinkSync(f);
+    return res.json({ reset: [target] });
+  }
+  // reset tutti
+  const reset = [];
+  puzzles.forEach(({ id }) => {
+    const f = statePath(id);
+    if (fs.existsSync(f)) { fs.unlinkSync(f); reset.push(id); }
+  });
+  res.json({ reset });
+});
+
 // serve the single-page app for any puzzle route
 app.get('/:id', (req, res) => {
   if (puzzleMap[req.params.id]) {
