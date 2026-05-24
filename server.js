@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 
 const app = express();
-const puzzles = require('./puzzles.json');
+const { secrets, puzzles } = require('./puzzles.json');
 const puzzleMap = Object.fromEntries(puzzles.map(p => [p.id, p]));
 const STATE_DIR = path.join(__dirname, 'state');
 
@@ -41,7 +41,7 @@ app.post('/api/:id/redeem', (req, res) => {
   if (state.used) return res.json({ success: false, reason: 'already_used' });
 
   const input = (req.body.word || '').trim().toLowerCase().replace(/\s+/g, ' ');
-  if (input !== puzzle.secret) return res.json({ success: false, reason: 'wrong_word' });
+  if (!secrets.includes(input)) return res.json({ success: false, reason: 'wrong_word' });
 
   markUsed(req.params.id);
   res.json({ success: true });
